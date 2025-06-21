@@ -71,6 +71,78 @@ Send a JSON object with the following structure:
 
 ---
 
+## POST `/users/login`
+
+Authenticates a user and returns a JWT token.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "string (valid email, required)",
+  "password": "string (min 6 chars, required)"
+}
+```
+
+#### Example
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Responses
+
+- **200 OK**
+  - User authenticated successfully.
+  - Returns a JSON object with a JWT token and the user data.
+  - Example:
+    ```json
+    {
+      "token": "jwt_token_here",
+      "user": {
+        "_id": "user_id_here",
+        "fullname": {
+          "firstname": "John",
+          "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "socketId": null
+      }
+    }
+    ```
+
+- **400 Bad Request**
+  - Validation failed (e.g., missing fields, invalid email, short password).
+  - Returns an array of error messages.
+  - Example:
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Invalid Email",
+          "param": "email",
+          "location": "body"
+        }
+      ]
+    }
+    ```
+
+- **401 Unauthorized**
+  - Invalid email or password.
+  - Example:
+    ```json
+    {
+      "message": "Invalid email or password"
+    }
+    ```
+
+---
+
 **Note:**  
 - All fields marked as required must be present in the request body.
 - The password is stored securely (hashed) and not returned in the response.
